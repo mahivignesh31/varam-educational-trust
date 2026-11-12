@@ -1,0 +1,101 @@
+:root {
+  --background: #f7f9fc;
+  --foreground: #14213d;
+  --card: #ffffff;
+  --card-foreground: #14213d;
+  --popover: #ffffff;
+  --popover-foreground: #14213d;
+  --primary: #00a651;
+  --primary-foreground: #ffffff;
+  --secondary: #e7ecf8;
+  --secondary-foreground: #303f91;
+  --accent: #e8f7ee;
+  --accent-foreground: #0b5a30;
+  --muted: #e8eef6;
+  --muted-foreground: #4c5b78;
+  --destructive: #c2410c;
+  --border: #d7e1ee;
+  --input: #d7e1ee;
+  --ring: #00a651;
+  --radius: 1rem;
+  --brand-green: #00a651;
+  --brand-blue: #303f91;
+  --brand-orange: #f58220;
+  --brand-navy: #14213d;
+  --brand-mist: #f7f9fc;
+}
+
+.dark {
+  --background: #0c1424;
+  --foreground: #f4f7fb;
+  --card: #141e33;
+  --card-foreground: #f4f7fb;
+  --popover: #18243c;
+  --popover-foreground: #f4f7fb;
+  --primary: #1dbf6a;
+  --primary-foreground: #04210f;
+  --secondary: #24345a;
+  --secondary-foreground: #d9e2ff;
+  --accent: #173526;
+  --accent-foreground: #b6f3cf;
+  --muted: #1c2942;
+  --muted-foreground: #b7c3d6;
+  --destructive: #fb923c;
+  --border: #2a3b5c;
+  --input: #2a3b5c;
+  --ring: #1dbf6a;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-outfit), ui-sans-serif, system-ui, sans-serif;
+  text-rendering: optimizeLegibility;
+}
+
+h1,
+h2,
+h3,
+.font-display {
+  font-family: var(--font-fraunces), Georgia, "Times New Roman", serif;
+  letter-spacing: -0.03em;
+}
+
+::selection {
+  background: #00a651;
+  color: #ffffff;
+}
+
+:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@media print {
+  @page {
+    margin: 12mm;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+}
