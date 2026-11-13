@@ -6,10 +6,12 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { ActionLink } from "@/components/auth/action-link";
-import { courseThumbnail } from "@/components/course-icon";
+import { courseCover } from "@/components/course-icon";
+import { CourseRoadmap } from "@/components/courses/course-roadmap";
 import { resumeLesson } from "@/components/courses/resume-lesson";
 import { Button } from "@/components/ui/button";
 import { Badge, Progress } from "@/components/ui/primitives";
+import { assignments } from "@/data/assignments";
 import { flatLessons } from "@/data/courses";
 import { useStudentWorkspace } from "@/components/lms/use-student";
 import { assembleQuizzes, courseProgress, findPresentedCourse, lessonPath } from "@/lib/catalog";
@@ -53,6 +55,7 @@ export function CourseDetailView({ courseKey }: { courseKey: string }) {
   }
 
   const { course, hidden } = found;
+  const cover = courseCover(course.icon);
   const enrolled = enrolledIds.includes(course.id);
   const progress = courseProgress(course, completedLessonIds);
   const lesson = resumeLesson(course, completedLessonIds, lastLesson[course.id]);
@@ -92,8 +95,8 @@ export function CourseDetailView({ courseKey }: { courseKey: string }) {
       <header className="overflow-hidden rounded-3xl border border-border bg-card">
         <div className="relative h-56">
           <Image
-            src={courseThumbnail(course.thumbnail)}
-            alt=""
+            src={cover.src}
+            alt={cover.alt}
             fill
             priority
             sizes="(min-width: 1024px) 72rem, 100vw"
@@ -148,6 +151,10 @@ export function CourseDetailView({ courseKey }: { courseKey: string }) {
           </ul>
         ) : null}
       </section>
+      <CourseRoadmap
+        course={course}
+        assignment={assignments.find((item) => item.courseSlug === course.slug || item.courseSlug === course.id)}
+      />
       <section className="space-y-4" aria-labelledby="outline-heading">
         <h2 id="outline-heading" className="font-display text-3xl">
           Module outline

@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { courseIconMap, courseThumbnail } from "@/components/course-icon";
+import { courseCover, courseIconMap } from "@/components/course-icon";
 import { Badge, Card, CardContent, Progress } from "@/components/ui/primitives";
 import { coursePath } from "@/lib/catalog";
 import { formatHours } from "@/lib/format";
@@ -16,20 +16,23 @@ function difficultyTone(difficulty: Difficulty): "green" | "blue" | "muted" {
 export function CourseCard({
   course,
   progress,
+  href,
   children,
 }: {
   course: Course;
   progress?: number;
+  href?: string;
   children?: React.ReactNode;
 }) {
   const Icon = courseIconMap[course.icon];
+  const cover = courseCover(course.icon);
   const lessons = flatLessons(course).length;
   return (
     <Card className="flex h-full flex-col overflow-hidden">
       <div className="relative h-44">
         <Image
-          src={courseThumbnail(course.thumbnail)}
-          alt=""
+          src={cover.src}
+          alt={cover.alt}
           fill
           sizes="(min-width: 1280px) 22rem, (min-width: 640px) 50vw, 100vw"
           className="object-cover"
@@ -45,7 +48,7 @@ export function CourseCard({
           {course.custom ? <Badge tone="orange">Added in this browser</Badge> : null}
         </div>
         <h2 className="mt-3 font-display text-2xl">
-          <Link href={coursePath(course)} className="hover:text-secondary-foreground">
+          <Link href={href ?? coursePath(course)} className="hover:text-secondary-foreground">
             {course.title}
           </Link>
         </h2>

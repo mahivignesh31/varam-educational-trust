@@ -5,7 +5,7 @@ import { motion, useReducedMotion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import { courseIconMap } from "@/components/course-icon";
-import { CourseArtwork } from "@/components/courses/course-artwork";
+import { CoursePhoto } from "@/components/courses/course-artwork";
 import { useSlideshow } from "@/components/slideshow";
 import { cn } from "@/lib/utils";
 import { SiteFrame, TrustLogo } from "@/components/layout/chrome";
@@ -182,7 +182,7 @@ export function HomePage() {
               onMouseLeave={() => programs.setPaused(false)}
             >
               <article className="grid overflow-hidden rounded-[2rem] border border-border bg-background lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)]">
-                <CourseArtwork icon={featured.icon} />
+                <CoursePhoto icon={featured.icon} />
                 <div className="flex flex-col justify-center p-6 sm:p-10">
                   <div className="flex flex-wrap items-center gap-2">
                     <span className="grid h-12 w-12 place-items-center rounded-2xl bg-accent text-brand-green">

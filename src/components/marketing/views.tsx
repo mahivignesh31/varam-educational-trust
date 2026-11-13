@@ -7,13 +7,14 @@ import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import { courseIconMap } from "@/components/course-icon";
-import { CourseArtwork } from "@/components/courses/course-artwork";
+import { CoursePhoto } from "@/components/courses/course-artwork";
+import { CourseCard } from "@/components/courses/course-card";
+import { CourseRoadmap } from "@/components/courses/course-roadmap";
 import { CampusPhoto } from "@/components/gallery/photo";
-import { useSlideshow } from "@/components/slideshow";
 import { SiteFrame } from "@/components/layout/chrome";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
-import { Badge, Input, Label, Textarea } from "@/components/ui/primitives";
+import { Input, Label, Textarea } from "@/components/ui/primitives";
 import { assignments } from "@/data/assignments";
 import { flatLessons, findCourse, courses } from "@/data/courses";
 import { galleryCategories, galleryItems } from "@/data/gallery";
@@ -74,9 +75,6 @@ export function ProgramsView() {
   const [category, setCategory] = useState("All");
   const categories = ["All", ...Array.from(new Set(courses.map((course) => course.category)))];
   const visible = courses.filter((course) => category === "All" || course.category === category);
-  const slides = useSlideshow(visible.length, 6000);
-  const course = visible[slides.index];
-  const Icon = course ? courseIconMap[course.icon] : null;
   return (
     <SiteFrame>
       <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6">
@@ -92,70 +90,20 @@ export function ProgramsView() {
             </Button>
           ))}
         </div>
-        {course && Icon ? (
-          <div
-            className="mt-8"
-            onMouseEnter={() => slides.setPaused(true)}
-            onMouseLeave={() => slides.setPaused(false)}
-          >
-            <article className="grid overflow-hidden rounded-[2rem] border border-border bg-card lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)]">
-              <CourseArtwork icon={course.icon} />
-              <div className="flex flex-col justify-center p-6 sm:p-10">
-                <div className="flex flex-wrap items-center gap-2">
-                  <span className="grid h-12 w-12 place-items-center rounded-2xl bg-accent text-brand-green">
-                    <Icon className="h-6 w-6" aria-hidden />
-                  </span>
-                  <Badge>{course.category}</Badge>
-                  <Badge tone="blue">{course.difficulty}</Badge>
-                </div>
-                <h2 className="mt-4 font-display text-4xl">{course.title}</h2>
-                <p className="mt-3 text-sm leading-7 text-muted-foreground">{course.summary}</p>
-                <ul className="mt-5 space-y-2">
-                  {course.outcomes.map((item) => (
-                    <li key={item} className="text-sm leading-6 text-foreground">
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-                <Button asChild className="mt-6 w-fit">
-                  <Link href={`/programs/${course.slug}`}>Learn More <ArrowRight /></Link>
+        <p aria-live="polite" className="mt-6 text-sm text-muted-foreground">
+          {visible.length === 1 ? "1 program" : `${visible.length} programs`}
+        </p>
+        {visible.length ? (
+          <div className="mt-5 grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+            {visible.map((course) => (
+              <CourseCard key={course.id} course={course} href={`/programs/${course.slug}`}>
+                <Button asChild>
+                  <Link href={`/programs/${course.slug}`}>
+                    Learn More <ArrowRight />
+                  </Link>
                 </Button>
-              </div>
-            </article>
-            {visible.length > 1 ? (
-              <div className="mt-4 flex items-center gap-3">
-                <button
-                  type="button"
-                  className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-border bg-card"
-                  aria-label="Previous program"
-                  onClick={slides.previous}
-                >
-                  <ChevronLeft className="h-5 w-5" />
-                </button>
-                <div className="min-w-0 flex-1">
-                  <div className="flex items-center justify-between gap-3 text-sm">
-                    <p className="truncate font-semibold">{course.title}</p>
-                    <p className="shrink-0 text-muted-foreground">
-                      {slides.index + 1} of {visible.length}
-                    </p>
-                  </div>
-                  <div className="mt-2 h-1 overflow-hidden rounded-full bg-border">
-                    <div
-                      className="h-full rounded-full bg-brand-green"
-                      style={{ width: `${((slides.index + 1) / visible.length) * 100}%` }}
-                    />
-                  </div>
-                </div>
-                <button
-                  type="button"
-                  className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-border bg-card"
-                  aria-label="Next program"
-                  onClick={slides.next}
-                >
-                  <ChevronRight className="h-5 w-5" />
-                </button>
-              </div>
-            ) : null}
+              </CourseCard>
+            ))}
           </div>
         ) : (
           <p className="mt-8 text-sm text-muted-foreground">No programs are in this category.</p>
@@ -181,20 +129,21 @@ export function ProgramDetail({ slug }: { slug: string }) {
               <Icon className="h-9 w-9 shrink-0 text-brand-green" aria-hidden /> {course.title}
             </h1>
             <p className="mt-4 text-base leading-7 text-muted-foreground">{course.description}</p>
-            <dl className="mt-6 grid grid-cols-2 gap-3 text-sm">
+            <dl className="mt-6 grid grid-cols-1 gap-3 text-sm sm:grid-cols-3">
               <div className="rounded-2xl bg-muted p-4"><dt className="text-muted-foreground">Level</dt><dd className="mt-1 font-semibold">{course.difficulty}</dd></div>
               <div className="rounded-2xl bg-muted p-4"><dt className="text-muted-foreground">Time</dt><dd className="mt-1 font-semibold">{formatHours(course.hours)}</dd></div>
               <div className="rounded-2xl bg-muted p-4"><dt className="text-muted-foreground">Lessons</dt><dd className="mt-1 font-semibold">{lessons.length}</dd></div>
-              <div className="rounded-2xl bg-muted p-4"><dt className="text-muted-foreground">Faculty</dt><dd className="mt-1 font-semibold">{course.instructor}</dd></div>
             </dl>
             <Button asChild className="mt-6 w-fit">
               <Link href={`/lms/courses/${course.slug}`}>Start Learning <ArrowRight /></Link>
             </Button>
           </div>
           <div className="h-full overflow-hidden rounded-[2rem] border border-border">
-            <CourseArtwork icon={course.icon} />
+            <CoursePhoto icon={course.icon} />
           </div>
         </div>
+
+        <CourseRoadmap className="mt-14" course={course} assignment={assignment} />
 
         <h2 className="mt-14 font-display text-3xl">What you will practise</h2>
         <ul className="mt-5 grid gap-3 md:grid-cols-3">

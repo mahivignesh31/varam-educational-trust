@@ -1,4 +1,6 @@
+import Image from "next/image";
 import type { ReactNode } from "react";
+import { courseCover } from "@/components/course-icon";
 import type { CourseIcon } from "@/types";
 
 function Frame({
@@ -372,4 +374,19 @@ const scenes: Record<CourseIcon, () => ReactNode> = {
 export function CourseArtwork({ icon }: { icon: CourseIcon }) {
   const Scene = scenes[icon];
   return <Scene />;
+}
+
+export function CoursePhoto({ icon }: { icon: CourseIcon }) {
+  const cover = courseCover(icon);
+  return (
+    <div className="relative h-full min-h-[22rem]">
+      <Image
+        src={cover.src}
+        alt={cover.alt}
+        fill
+        sizes="(min-width: 1024px) 40rem, 100vw"
+        className="object-cover"
+      />
+    </div>
+  );
 }
