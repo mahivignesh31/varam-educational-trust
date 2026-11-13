@@ -456,7 +456,10 @@ export function LoginView() {
       return;
     }
     toast.success("Signed in.");
-    router.push(await destinationFor(data.user.id));
+    const dest = await destinationFor(data.user.id);
+    const next = new URLSearchParams(window.location.search).get("next");
+    const back = dest === "/lms" && next && next.startsWith("/lms") && !next.startsWith("//") ? next : dest;
+    router.push(back);
   }
 
   return (

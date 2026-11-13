@@ -3,7 +3,9 @@
 import { Check } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { ActionLink } from "@/components/auth/action-link";
 import { courseThumbnail } from "@/components/course-icon";
 import { resumeLesson } from "@/components/courses/resume-lesson";
 import { Button } from "@/components/ui/button";
@@ -11,6 +13,8 @@ import { Badge, Progress } from "@/components/ui/primitives";
 import { flatLessons } from "@/data/courses";
 import { useStudentWorkspace } from "@/components/lms/use-student";
 import { assembleQuizzes, courseProgress, findPresentedCourse, lessonPath } from "@/lib/catalog";
+import { useAuth } from "@/lib/auth";
+import { loginPath } from "@/lib/login-path";
 import { formatHours, formatMinutes } from "@/lib/format";
 import type { AssessmentCategory } from "@/types";
 
@@ -30,6 +34,8 @@ export function CourseDetailView({ courseKey }: { courseKey: string }) {
     enroll,
     restoreCourse,
   } = useStudentWorkspace();
+  const router = useRouter();
+  const { session } = useAuth();
   const found = findPresentedCourse(courseKey, catalogState);
 
   if (!found) {
@@ -55,8 +61,12 @@ export function CourseDetailView({ courseKey }: { courseKey: string }) {
   );
 
   function enrollIn() {
+    if (!session) {
+      router.push(loginPath(`/lms/courses/${course.slug}`));
+      return;
+    }
     enroll(course.id);
-    toast.success("Enrolled in this browser.");
+    toast.success("Enrolled.");
   }
 
   return (
@@ -108,7 +118,7 @@ export function CourseDetailView({ courseKey }: { courseKey: string }) {
           <div className="flex flex-wrap gap-2">
             {enrolled && lesson ? (
               <Button asChild>
-                <Link href={lessonPath(course, lesson.id)}>{progress === 100 ? "Review lessons" : "Continue"}</Link>
+                <ActionLink href={lessonPath(course, lesson.id)}>{progress === 100 ? "Review lessons" : "Continue"}</ActionLink>
               </Button>
             ) : null}
             {!enrolled ? (
@@ -122,18 +132,6 @@ export function CourseDetailView({ courseKey }: { courseKey: string }) {
           </div>
         </div>
       </header>
-      {!enrolled ? (
-        <section className="rounded-3xl border border-border bg-card p-6">
-          <h2 className="font-display text-3xl">Course details</h2>
-          <p className="mt-3 max-w-3xl text-sm leading-7 text-muted-foreground">
-            Enroll to open the full description, outcomes, modules, and lessons for {course.title}.
-          </p>
-          <Button type="button" className="mt-4" onClick={enrollIn}>
-            Enroll and view details
-          </Button>
-        </section>
-      ) : null}
-      {enrolled ? <>
       <section className="space-y-3" aria-labelledby="overview-heading">
         <h2 id="overview-heading" className="font-display text-3xl">
           Overview
@@ -162,7 +160,7 @@ export function CourseDetailView({ courseKey }: { courseKey: string }) {
                 <ol className="mt-3 space-y-2">
                   {module.lessons.map((item, index) => (
                     <li key={item.id}>
-                      <Link
+                      <ActionLink
                         href={lessonPath(course, item.id)}
                         className="flex items-center justify-between gap-3 rounded-2xl px-3 py-2 hover:bg-muted"
                       >
@@ -170,7 +168,7 @@ export function CourseDetailView({ courseKey }: { courseKey: string }) {
                           {index + 1}. {item.title}
                         </span>
                         <span className="shrink-0 text-xs text-muted-foreground">{formatMinutes(item.minutes)}</span>
-                      </Link>
+                      </ActionLink>
                     </li>
                   ))}
                 </ol>
@@ -189,7 +187,7 @@ export function CourseDetailView({ courseKey }: { courseKey: string }) {
           <ul className="grid gap-3">
             {quizzes.map((quiz) => (
               <li key={quiz.id}>
-                <Link
+                <ActionLink
                   href={`/lms/quiz/${quiz.id}`}
                   className="flex flex-wrap items-center justify-between gap-3 rounded-3xl border border-border bg-card px-5 py-4 hover:bg-muted"
                 >
@@ -200,7 +198,7 @@ export function CourseDetailView({ courseKey }: { courseKey: string }) {
                     </span>
                   </span>
                   <Badge tone="blue">{categoryLabel[quiz.category]}</Badge>
-                </Link>
+                </ActionLink>
               </li>
             ))}
           </ul>
@@ -210,7 +208,6 @@ export function CourseDetailView({ courseKey }: { courseKey: string }) {
           </p>
         )}
       </section>
-      </> : null}
     </div>
   );
 }

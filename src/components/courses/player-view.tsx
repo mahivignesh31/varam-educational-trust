@@ -2,14 +2,18 @@
 
 import { Check, Circle } from "lucide-react";
 import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { toast } from "sonner";
 import { SampleReel } from "@/components/courses/sample-reel";
 import { downloadNotes } from "@/components/lms/download-notes";
 import { useStudentWorkspace } from "@/components/lms/use-student";
 import { Button } from "@/components/ui/button";
+import { RouteSkeleton } from "@/components/ui/primitives";
 import { findLesson, flatLessons } from "@/data/courses";
 import { coursePath, findPresentedCourse, lessonPath } from "@/lib/catalog";
+import { useAuth } from "@/lib/auth";
+import { loginPath } from "@/lib/login-path";
 import { formatMinutes } from "@/lib/format";
 import { cn } from "@/lib/utils";
 
@@ -29,11 +33,20 @@ export function PlayerView({ courseKey, lessonId }: { courseKey: string; lessonI
   const lesson = course && lessonId ? findLesson(course, lessonId) : undefined;
   const courseId = course?.id;
   const activeLessonId = lesson?.id;
+  const { ready, session } = useAuth();
+  const router = useRouter();
+  const pathname = usePathname();
 
   useEffect(() => {
-    if (!courseId || !activeLessonId) return;
+    if (ready && !session) router.replace(loginPath(pathname));
+  }, [pathname, ready, router, session]);
+
+  useEffect(() => {
+    if (!session || !courseId || !activeLessonId) return;
     setLastLesson(courseId, activeLessonId);
-  }, [activeLessonId, courseId, setLastLesson]);
+  }, [activeLessonId, courseId, session, setLastLesson]);
+
+  if (ready && !session) return <RouteSkeleton />;
 
   if (!courseKey || !lessonId) {
     return (

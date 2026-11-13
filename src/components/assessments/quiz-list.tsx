@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { ActionLink } from "@/components/auth/action-link";
 import { useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { RouteSkeleton } from "@/components/ui/primitives";
@@ -121,10 +121,10 @@ function QuizRow({
             </dl>
           </div>
           <Button asChild>
-            <Link href={`/lms/quiz/${quiz.id}`}>
+            <ActionLink href={`/lms/quiz/${quiz.id}`}>
               Open paper
               <span className="sr-only"> {quiz.title}</span>
-            </Link>
+            </ActionLink>
           </Button>
         </div>
       </article>

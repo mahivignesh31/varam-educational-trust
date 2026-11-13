@@ -11,7 +11,10 @@ import { PageHeader } from "@/components/lms/page-header";
 import { useStudentWorkspace } from "@/components/lms/use-student";
 import { Button } from "@/components/ui/button";
 import { Input, Label, Select } from "@/components/ui/primitives";
+import { ActionLink } from "@/components/auth/action-link";
 import { coursePath, courseProgress, findPresentedCourse, lessonPath } from "@/lib/catalog";
+import { useAuth } from "@/lib/auth";
+import { loginPath } from "@/lib/login-path";
 import type { Difficulty } from "@/types";
 
 type SortKey = "title" | "hours" | "difficulty";
@@ -34,6 +37,7 @@ export function CatalogView() {
     restoreCourse,
   } = useStudentWorkspace();
   const router = useRouter();
+  const { session } = useAuth();
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState("All");
   const [difficulty, setDifficulty] = useState<DifficultyFilter>("All");
@@ -80,6 +84,10 @@ export function CatalogView() {
   }
 
   function enrollIn(courseId: string) {
+    if (!session) {
+      router.push(loginPath("/lms/courses"));
+      return;
+    }
     enroll(courseId);
     const course = catalog.find((item) => item.id === courseId);
     toast.success(course ? `Enrolled in ${course.title}.` : "Enrolled.");
@@ -158,7 +166,7 @@ export function CatalogView() {
               <CourseCard key={course.id} course={course} progress={enrolled ? progress : undefined}>
                 {enrolled && lesson ? (
                   <Button asChild>
-                    <Link href={lessonPath(course, lesson.id)}>Continue</Link>
+                    <ActionLink href={lessonPath(course, lesson.id)}>Continue</ActionLink>
                   </Button>
                 ) : null}
                 {enrolled && !lesson ? (

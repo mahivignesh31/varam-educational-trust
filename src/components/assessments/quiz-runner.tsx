@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -10,6 +11,8 @@ import { passMark } from "@/data/quizzes";
 import { useCatalogState } from "@/hooks/use-catalog";
 import { useStoreHydrated } from "@/hooks/use-hydrated";
 import { findPresentedCourse, findPresentedQuiz, scoreQuiz } from "@/lib/catalog";
+import { useAuth } from "@/lib/auth";
+import { loginPath } from "@/lib/login-path";
 import { formatClock, formatDateTime } from "@/lib/format";
 import { useDemoStore } from "@/lib/store";
 import { cn } from "@/lib/utils";
@@ -49,6 +52,8 @@ function paletteLabel(position: number, answered: boolean, review: boolean, curr
 
 export function QuizRunner({ quizId }: { quizId: string }) {
   const hydrated = useStoreHydrated();
+  const { ready, session: account } = useAuth();
+  const router = useRouter();
   const catalog = useCatalogState();
   const quiz = useMemo(() => findPresentedQuiz(quizId, catalog), [quizId, catalog]);
   const activeQuiz = useDemoStore((state) => state.activeQuiz);
@@ -115,7 +120,11 @@ export function QuizRunner({ quizId }: { quizId: string }) {
   );
 
   useEffect(() => {
-    if (!hydrated || !quiz || quiz.questions.length === 0 || submittedRef.current) return;
+    if (ready && !account) router.replace(loginPath(`/lms/quiz/${quizId}`));
+  }, [account, quizId, ready, router]);
+
+  useEffect(() => {
+    if (!account || !hydrated || !quiz || quiz.questions.length === 0 || submittedRef.current) return;
     const active = useDemoStore.getState().activeQuiz;
     if (active?.quizId === quiz.id) {
       if (active.endsAt <= Date.now()) {
@@ -132,7 +141,7 @@ export function QuizRunner({ quizId }: { quizId: string }) {
       index: 0,
       endsAt: Date.now() + quiz.minutes * 60 * 1000,
     });
-  }, [hydrated, quiz, setActiveQuiz, finish]);
+  }, [account, hydrated, quiz, setActiveQuiz, finish]);
 
   useLayoutEffect(() => {
     if (!hydrated || endsAt == null || resultId) return;
@@ -225,7 +234,7 @@ export function QuizRunner({ quizId }: { quizId: string }) {
   }
 
   let body: React.ReactNode;
-  if (!hydrated) {
+  if (!hydrated || (ready && !account)) {
     body = <RouteSkeleton />;
   } else if (!quiz) {
     body = (

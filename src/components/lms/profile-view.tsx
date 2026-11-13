@@ -1,19 +1,28 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 import { PageHeader } from "@/components/lms/page-header";
 import { useStudentWorkspace } from "@/components/lms/use-student";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, Input, Label, Textarea } from "@/components/ui/primitives";
+import { useAuth } from "@/lib/auth";
+import { loginPath } from "@/lib/login-path";
 
 export function ProfileView() {
   const { studentName, studentGoal, setProfile } = useStudentWorkspace();
+  const { session } = useAuth();
+  const router = useRouter();
   const [name, setName] = useState(studentName);
   const [goal, setGoal] = useState(studentGoal);
 
   function save(event: React.FormEvent) {
     event.preventDefault();
+    if (!session) {
+      router.push(loginPath("/lms/profile"));
+      return;
+    }
     const nextName = name.trim().slice(0, 40) || "Demo Student";
     const nextGoal = goal.trim().slice(0, 280);
     setProfile({ studentName: nextName, studentGoal: nextGoal });

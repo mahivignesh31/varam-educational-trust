@@ -29,6 +29,7 @@ import { Card, CardContent, RouteSkeleton } from "@/components/ui/primitives";
 import { organization } from "@/data/organization";
 import { useStoreHydrated } from "@/hooks/use-hydrated";
 import { useAuth } from "@/lib/auth";
+import { loginPath } from "@/lib/login-path";
 import { useDemoStore } from "@/lib/store";
 import { cn } from "@/lib/utils";
 
@@ -143,8 +144,10 @@ export function LmsShell({ children }: { children: React.ReactNode }) {
     );
   }
 
-  if (!session || profileMissing) return <SignInGate profileMissing={profileMissing} />;
+  if (session && profileMissing) return <SignInGate profileMissing />;
   if (profile?.role === "trainer" && profile.status !== "active") return <TrainerPending />;
+
+  const guest = !session;
 
   return (
     <div className="min-h-screen bg-background text-foreground lg:grid lg:grid-cols-[18rem_minmax(0,1fr)]">
@@ -154,7 +157,7 @@ export function LmsShell({ children }: { children: React.ReactNode }) {
             <TrustLogo size={56} priority />
           </Link>
           <p className="mt-4 font-display text-xl">Student LMS</p>
-          <p className="text-xs text-white/70">Demonstration campus</p>
+          <p className="text-xs text-white/70">{guest ? "Look around, then sign in" : "Your account"}</p>
         </div>
         <nav className="min-h-0 flex-1 space-y-1 overflow-y-auto px-3 pb-6" aria-label="Student">
           <NavLinks pathname={pathname} tone="navy" />
@@ -177,22 +180,36 @@ export function LmsShell({ children }: { children: React.ReactNode }) {
             <TrustLogo size={36} />
           </Link>
           <p className="min-w-0 truncate text-sm">
-            <span className="text-muted-foreground">{signedInAs} </span>
-            <span className="font-semibold text-foreground">{profile?.role === "student" ? studentName : profile?.name || studentName}</span>
+            {guest ? (
+              <span className="font-semibold text-foreground">Visitor</span>
+            ) : (
+              <>
+                <span className="text-muted-foreground">{signedInAs} </span>
+                <span className="font-semibold text-foreground">{profile?.role === "student" ? studentName : profile?.name || studentName}</span>
+              </>
+            )}
           </p>
           <div className="ml-auto flex items-center gap-2">
             <ThemeToggle />
-            <button
-              type="button"
-              onClick={() => void signOut().then(() => { window.location.href = "/"; })}
-              className="rounded-full px-3 py-2 text-sm font-semibold text-secondary-foreground underline-offset-4 hover:underline"
-            >
-              Sign out
-            </button>
+            {guest ? (
+              <Button asChild size="sm">
+                <Link href={loginPath(pathname)}>Sign in</Link>
+              </Button>
+            ) : (
+              <button
+                type="button"
+                onClick={() => void signOut().then(() => { window.location.href = "/"; })}
+                className="rounded-full px-3 py-2 text-sm font-semibold text-secondary-foreground underline-offset-4 hover:underline"
+              >
+                Sign out
+              </button>
+            )}
           </div>
         </header>
         <p className="border-b border-border bg-secondary px-4 py-3 text-sm leading-6 text-secondary-foreground sm:px-6">
-          Signed in. Your progress is saved to your account.
+          {guest
+            ? "You can look through the campus. Sign in to enroll, open a lesson, or start a quiz."
+            : "Signed in. Your progress is saved to your account."}
         </p>
         <main id="main" className="px-4 py-6 sm:px-6 lg:px-8">
           <div className="mx-auto w-full max-w-6xl">{children}</div>

@@ -2,6 +2,8 @@
 
 import { Printer } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 import { TrustLogo } from "@/components/layout/chrome";
 import { Button } from "@/components/ui/button";
 import { RouteSkeleton } from "@/components/ui/primitives";
@@ -11,6 +13,7 @@ import { useStoreHydrated } from "@/hooks/use-hydrated";
 import { courseProgress, findPresentedCourse } from "@/lib/catalog";
 import { formatDate } from "@/lib/format";
 import { useAuth } from "@/lib/auth";
+import { loginPath } from "@/lib/login-path";
 import { useDemoStore } from "@/lib/store";
 
 function certificateNumber(slug: string, iso: string) {
@@ -21,13 +24,18 @@ function certificateNumber(slug: string, iso: string) {
 export function CertificateView({ courseSlug }: { courseSlug: string }) {
   const hydrated = useStoreHydrated();
   const catalog = useCatalogState();
-  const { profile } = useAuth();
+  const { ready, session, profile } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (ready && !session) router.replace(loginPath(`/lms/certificates/${courseSlug}`));
+  }, [courseSlug, ready, router, session]);
   const studentName = useDemoStore((state) => state.studentName);
   const completedLessonIds = useDemoStore((state) => state.completedLessonIds);
   const courseCompletedAt = useDemoStore((state) => state.courseCompletedAt);
   const match = findPresentedCourse(courseSlug, catalog);
 
-  if (!hydrated) return <RouteSkeleton />;
+  if (!hydrated || (ready && !session)) return <RouteSkeleton />;
 
   if (!match) {
     return (

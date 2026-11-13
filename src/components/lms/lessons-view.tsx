@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { ActionLink } from "@/components/auth/action-link";
 import { EmptyState } from "@/components/lms/empty-state";
 import { PageHeader } from "@/components/lms/page-header";
 import { useStudentWorkspace } from "@/components/lms/use-student";
@@ -59,12 +60,12 @@ export function LessonsView() {
                       </div>
                       <div className="flex flex-wrap items-center gap-2">
                         <Badge tone={shared ? "blue" : "green"}>{shared ? "Video lesson" : "Lesson"}</Badge>
-                        <Link
+                        <ActionLink
                           href={lessonPath(course, lesson.id)}
                           className="rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground hover:bg-[#008f46]"
                         >
                           Open lesson
-                        </Link>
+                        </ActionLink>
                       </div>
                     </li>
                   );

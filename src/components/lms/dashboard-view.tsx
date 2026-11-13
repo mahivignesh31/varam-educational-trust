@@ -18,6 +18,9 @@ import {
   learningHours,
   lessonPath,
 } from "@/lib/catalog";
+import { ActionLink } from "@/components/auth/action-link";
+import { useAuth } from "@/lib/auth";
+import { loginPath } from "@/lib/login-path";
 import { formatDate, formatMinutes } from "@/lib/format";
 import { toast } from "sonner";
 
@@ -41,6 +44,7 @@ export function DashboardView() {
     enroll,
   } = workspace;
   const router = useRouter();
+  const { session } = useAuth();
 
   const enrolledCourses = enrolled.map((item) => item.course);
   const progresses = enrolledCourses.map((course) => courseProgress(course, completedLessonIds));
@@ -75,7 +79,7 @@ export function DashboardView() {
   return (
     <div className="space-y-8">
       <header className="max-w-3xl">
-        <h1 className="font-display text-4xl text-foreground">Welcome Back, {studentName}</h1>
+        <h1 className="font-display text-4xl text-foreground">{session ? `Welcome Back, ${studentName}` : "Student LMS"}</h1>
         <p className="mt-3 text-sm leading-6 text-muted-foreground">
           Counts on this page come from lessons, enrollments, and quiz attempts saved to the free database for this browser.
         </p>
@@ -142,7 +146,7 @@ export function DashboardView() {
           </div>
           {target ? (
             <Button asChild>
-              <Link href={lessonPath(target.course, target.lesson.id)}>Continue</Link>
+              <ActionLink href={lessonPath(target.course, target.lesson.id)}>Continue</ActionLink>
             </Button>
           ) : (
             <Button asChild>
@@ -271,6 +275,10 @@ export function DashboardView() {
                 <Button
                   type="button"
                   onClick={() => {
+                    if (!session) {
+                      router.push(loginPath(coursePath(course)));
+                      return;
+                    }
                     enroll(course.id);
                     toast.success(`Enrolled in ${course.title}.`);
                     router.push(coursePath(course));

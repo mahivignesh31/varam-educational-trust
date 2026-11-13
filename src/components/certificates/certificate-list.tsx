@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { ActionLink } from "@/components/auth/action-link";
 import { courseIconMap } from "@/components/course-icon";
 import { Button } from "@/components/ui/button";
 import { RouteSkeleton } from "@/components/ui/primitives";
@@ -68,10 +68,10 @@ export function CertificateList() {
                       </div>
                     </div>
                     <Button asChild>
-                      <Link href={`/lms/certificates/${course.slug}`}>
-                        View sample certificate
+                      <ActionLink href={`/lms/certificates/${course.slug}`}>
+                        View certificate
                         <span className="sr-only"> for {presented.title}</span>
-                      </Link>
+                      </ActionLink>
                     </Button>
                   </div>
                 </article>

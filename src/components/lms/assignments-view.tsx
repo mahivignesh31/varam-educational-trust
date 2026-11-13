@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 import { PageHeader } from "@/components/lms/page-header";
@@ -8,6 +9,8 @@ import { Button } from "@/components/ui/button";
 import { Badge, Card, CardContent, Label, Textarea } from "@/components/ui/primitives";
 import { assignments } from "@/data/assignments";
 import { findPresentedCourse } from "@/lib/catalog";
+import { useAuth } from "@/lib/auth";
+import { loginPath } from "@/lib/login-path";
 import { formatDateTime, formatMinutes } from "@/lib/format";
 import type { Assignment } from "@/types";
 
@@ -51,14 +54,20 @@ export function AssignmentsView() {
 
 function AssignmentEditor({ assignment }: { assignment: Assignment }) {
   const { assignmentDrafts, saveAssignment } = useStudentWorkspace();
+  const { session } = useAuth();
+  const router = useRouter();
   const saved = assignmentDrafts[assignment.id];
   const [text, setText] = useState(saved?.text ?? "");
   const dirty = text !== (saved?.text ?? "");
 
   function save(event: React.FormEvent) {
     event.preventDefault();
+    if (!session) {
+      router.push(loginPath("/lms/assignments"));
+      return;
+    }
     saveAssignment(assignment.id, text);
-    toast.success("Saved on this device.");
+    toast.success("Saved.");
   }
 
   return (

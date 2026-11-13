@@ -1,12 +1,15 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
 import { PageHeader } from "@/components/lms/page-header";
 import { useStudentWorkspace } from "@/components/lms/use-student";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/primitives";
 import { ConfirmDialog } from "@/components/ui/dialog";
+import { useAuth } from "@/lib/auth";
+import { loginPath } from "@/lib/login-path";
 import { cn } from "@/lib/utils";
 
 const themes = [
@@ -18,6 +21,8 @@ const themes = [
 export function SettingsView() {
   const { theme, setTheme } = useTheme();
   const { resetDemo } = useStudentWorkspace();
+  const { session } = useAuth();
+  const router = useRouter();
   const [confirm, setConfirm] = useState(false);
 
   return (
@@ -54,7 +59,17 @@ export function SettingsView() {
             edits are shared there too. No password is stored. This is still a demonstration record, not an official
             Trust student file. Appearance stays on this device.
           </p>
-          <Button type="button" variant="destructive" onClick={() => setConfirm(true)}>
+          <Button
+            type="button"
+            variant="destructive"
+            onClick={() => {
+              if (!session) {
+                router.push(loginPath("/lms/settings"));
+                return;
+              }
+              setConfirm(true);
+            }}
+          >
             Reset demonstration data
           </Button>
         </CardContent>
