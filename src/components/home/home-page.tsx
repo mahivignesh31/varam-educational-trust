@@ -251,14 +251,14 @@ export function HomePage() {
         <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brand-green">Why learn here</p>
         <h2 className="mt-3 max-w-2xl font-display text-4xl">A practical way of teaching.</h2>
         <div className="mt-10 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-          {whyChoose.map((item, index) => {
+          {whyChoose.map((item) => {
             const Icon = whyIcons[item.icon];
-            const tint = ["bg-[#e7f6ee]", "bg-[#e8eefc]", "bg-[#fff4e8]"][index % 3];
             return (
               <article key={item.title} className="overflow-hidden rounded-[2rem] border border-border bg-card">
-                <div className={`flex h-36 items-end p-6 ${tint}`}>
-                  <span className="grid h-14 w-14 place-items-center rounded-2xl bg-white text-brand-green shadow-sm">
-                    <Icon className="h-7 w-7" aria-hidden />
+                <div className="relative h-44">
+                  <Image src={item.image} alt={item.alt} fill className="object-cover" sizes="(min-width: 1280px) 33vw, (min-width: 768px) 50vw, 100vw" />
+                  <span className="absolute bottom-3 left-3 grid h-11 w-11 place-items-center rounded-2xl bg-white text-brand-green shadow-sm">
+                    <Icon className="h-5 w-5" aria-hidden />
                   </span>
                 </div>
                 <div className="p-6">

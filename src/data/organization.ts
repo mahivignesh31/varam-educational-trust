@@ -69,31 +69,43 @@ export const whyChoose = [
     title: "Practical Learning",
     text: "Lessons are built around tasks a learner can try: a file, a worksheet, a short conversation, or a small program.",
     icon: "laptop",
+    image: "/images/classroom-training.jpg",
+    alt: "Learners seated at desks, working through papers during a training session.",
   },
   {
     title: "Industry-Relevant Skills",
     text: "Programs focus on tools and habits used in offices, classrooms, and entry-level digital work.",
     icon: "briefcase",
+    image: "/images/courses/microsoft-office.jpg",
+    alt: "People reviewing documents beside laptops on a desk.",
   },
   {
     title: "Experienced Trainers",
     text: "Trainers show a task, watch the practice, and correct it with care.",
     icon: "users",
+    image: "/images/gallery/hall-group.jpg",
+    alt: "Trainers standing with learners at the front of a hall session.",
   },
   {
     title: "Digital Learning Resources",
     text: "The campus includes notes, video lessons, and practice papers a learner can revisit in the browser.",
     icon: "library",
+    image: "/images/courses/computer-fundamentals.jpg",
+    alt: "An open laptop on a wooden desk.",
   },
   {
     title: "Career Readiness",
     text: "Employability and guidance programs connect skills with how a learner might talk about them in a workplace conversation.",
     icon: "compass",
+    image: "/images/gallery/learners-uniform.jpg",
+    alt: "Learners in blue work uniforms photographed together.",
   },
   {
     title: "Student-Centered Education",
     text: "Pace, language, and examples should fit the people in the room, including learners who are new to computers.",
     icon: "heart",
+    image: "/images/students-group.jpg",
+    alt: "A large group of learners and trainers standing together on the campus steps.",
   },
 ] as const;
 
