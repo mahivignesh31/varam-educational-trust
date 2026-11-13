@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
+import { CaptchaField, useCaptcha } from "@/components/auth/captcha-field";
 import { courseIconMap } from "@/components/course-icon";
 import { CoursePhoto } from "@/components/courses/course-artwork";
 import { CourseCard } from "@/components/courses/course-card";
@@ -390,9 +391,15 @@ export function LoginView() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [pending, setPending] = useState(false);
+  const captcha = useCaptcha();
 
   async function submit(event: React.FormEvent) {
     event.preventDefault();
+    if (!captcha.matches) {
+      toast.error("The captcha does not match. Type the new characters.");
+      captcha.refresh();
+      return;
+    }
     if (!supabase) {
       toast.error("The database is not configured on this site.");
       return;
@@ -402,6 +409,7 @@ export function LoginView() {
     setPending(false);
     if (error || !data.user) {
       toast.error(error?.message === "Email not confirmed" ? "Confirm your email, then sign in." : "Email or password is not correct.");
+      captcha.refresh();
       return;
     }
     toast.success("Signed in.");
@@ -423,7 +431,8 @@ export function LoginView() {
             <Label htmlFor="login-password">Password</Label>
             <Input id="login-password" type="password" autoComplete="current-password" className="mt-2" value={password} onChange={(event) => setPassword(event.target.value)} required />
           </div>
-          <Button type="submit" className="w-full" disabled={pending}>{pending ? "Signing in…" : "Sign in"}</Button>
+          <CaptchaField challenge={captcha.challenge} answer={captcha.answer} onAnswer={captcha.setAnswer} onRefresh={captcha.refresh} />
+          <Button type="submit" className="w-full" disabled={pending || !captcha.ready}>{pending ? "Signing in…" : "Sign in"}</Button>
         </form>
         <div className="mt-4 flex justify-between text-sm">
           <Link href="/forgot-password" className="font-semibold text-brand-blue">Forgot password</Link>
