@@ -369,6 +369,14 @@ const scenes: Record<CourseIcon, () => ReactNode> = {
   messages: Conversation,
   briefcase: Checklist,
   compass: PathScene,
+  calculator: SheetScene,
+  receipt: DocumentScene,
+  wallet: SheetScene,
+  pie: ChartScene,
+  coins: DocumentScene,
+  landmark: SearchScene,
+  type: DocumentScene,
+  image: ChartScene,
 };
 
 export function CourseArtwork({ icon }: { icon: CourseIcon }) {

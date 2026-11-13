@@ -4,19 +4,27 @@ import {
   Bot,
   Braces,
   Briefcase,
+  Calculator,
   Cloud,
   Code2,
+  Coins,
   Compass,
   Cpu,
   FileSpreadsheet,
   GitBranch,
   Globe,
+  Image,
+  Landmark,
   Languages,
   MessagesSquare,
+  PieChart,
+  Receipt,
   Monitor,
   Radio,
   Sparkles,
   Table2,
+  Type,
+  Wallet,
   Terminal,
   type LucideIcon,
 } from "lucide-react";
@@ -43,6 +51,14 @@ export const courseIconMap: Record<CourseIcon, LucideIcon> = {
   bot: Bot,
   cpu: Cpu,
   radio: Radio,
+  calculator: Calculator,
+  receipt: Receipt,
+  wallet: Wallet,
+  pie: PieChart,
+  coins: Coins,
+  landmark: Landmark,
+  type: Type,
+  image: Image,
 };
 
 export function courseThumbnail(thumbnail: "classroom" | "group") {
@@ -125,6 +141,38 @@ const courseCovers: Record<CourseIcon, { src: string; alt: string }> = {
   compass: {
     src: "/images/courses/career-guidance.jpg",
     alt: "Three people talking around laptops at a table",
+  },
+  calculator: {
+    src: "/images/courses/tally-erp9.jpg",
+    alt: "A person signing account papers at a desk",
+  },
+  receipt: {
+    src: "/images/courses/tally-gst.jpg",
+    alt: "A customer paying at a shop counter",
+  },
+  wallet: {
+    src: "/images/courses/basic-accounting.jpg",
+    alt: "An open notebook and a pen on a desk",
+  },
+  pie: {
+    src: "/images/courses/financial-statements.jpg",
+    alt: "Printed charts and percentages spread on a desk",
+  },
+  coins: {
+    src: "/images/courses/payroll.jpg",
+    alt: "A pile of coins with a small plant growing from them",
+  },
+  landmark: {
+    src: "/images/courses/banking.jpg",
+    alt: "A hand entering a code on a bank machine keypad",
+  },
+  type: {
+    src: "/images/courses/dtp.jpg",
+    alt: "Colour swatches and a tablet with layout sketches",
+  },
+  image: {
+    src: "/images/courses/photoshop.jpg",
+    alt: "A person using a drawing tablet beside colour charts",
   },
 };
 

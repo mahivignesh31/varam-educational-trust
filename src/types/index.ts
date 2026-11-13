@@ -21,7 +21,15 @@ export type CourseIcon =
   | "chart"
   | "bot"
   | "cpu"
-  | "radio";
+  | "radio"
+  | "calculator"
+  | "receipt"
+  | "wallet"
+  | "pie"
+  | "coins"
+  | "landmark"
+  | "type"
+  | "image";
 
 export interface LessonMaterial {
   id: string;

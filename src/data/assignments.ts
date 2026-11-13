@@ -146,6 +146,70 @@ export const assignments: Assignment[] = [
     minutes: 30,
   },
   {
+    id: "asg-tally",
+    courseSlug: "tally-erp-9",
+    title: "One voucher, end to end",
+    prompt:
+      "Describe a cash purchase for a practice company in Tally ERP 9. Name the voucher type, the ledgers you would use, and the report where you would confirm the entry afterwards.",
+    minutes: 30,
+  },
+  {
+    id: "asg-tally-gst",
+    courseSlug: "tally-with-gst",
+    title: "A tax invoice check",
+    prompt:
+      "List the details a GST tax invoice needs for a sale inside one state. Say whether the tax is CGST and SGST or IGST, and name the return that reports outward supplies.",
+    minutes: 30,
+  },
+  {
+    id: "asg-accounting",
+    courseSlug: "basic-accounting",
+    title: "Two equal sides",
+    prompt:
+      "Write the journal entry for cash received from the owner as capital. Name the debit, the credit, and one reason the trial balance would fail if you posted only one side.",
+    minutes: 25,
+  },
+  {
+    id: "asg-statements",
+    courseSlug: "financial-statements",
+    title: "Profit is not cash",
+    prompt:
+      "A practice shop shows a profit and almost no cash. In a short note, explain how both can be true, and name one figure you would read on the balance sheet before you judged the shop.",
+    minutes: 25,
+  },
+  {
+    id: "asg-payroll",
+    courseSlug: "payroll-and-salary",
+    title: "One pay slip",
+    prompt:
+      "Draft a sample pay slip for one month: earnings, two deductions, payable days, and net pay. Label it as a sample and say which total should match the bank payment.",
+    minutes: 30,
+  },
+  {
+    id: "asg-banking",
+    courseSlug: "banking-and-reconciliation",
+    title: "Why the balances differ",
+    prompt:
+      "The cash book bank balance and the bank statement disagree. Name two ordinary reasons that are timing differences and one difference that is an error in the books.",
+    minutes: 25,
+  },
+  {
+    id: "asg-dtp",
+    courseSlug: "desktop-publishing",
+    title: "One card, ready to print",
+    prompt:
+      "Describe a visiting card you would lay out: the page size, what goes on it, and two things you would check on the PDF before sending it to print.",
+    minutes: 25,
+  },
+  {
+    id: "asg-photoshop",
+    courseSlug: "photoshop",
+    title: "Keep the original",
+    prompt:
+      "You are asked to brighten a practice photograph and remove one speck. Say where the original file stays, what you put on its own layer, and which file you would hand over for a website.",
+    minutes: 30,
+  },
+  {
     id: "asg-iot",
     courseSlug: "internet-of-things",
     title: "One device reading",

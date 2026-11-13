@@ -1,4 +1,6 @@
 import type { Course, Lesson, LessonVideo, Module } from "@/types";
+import { designCourses } from "@/data/design-courses";
+import { financeCourses } from "@/data/finance-courses";
 import { technologyCourses } from "@/data/technology-courses";
 
 interface LessonSeed {
@@ -102,6 +104,8 @@ const youtube = (
 
 export const courses: Course[] = [
   ...technologyCourses,
+  ...financeCourses,
+  ...designCourses,
   buildCourse({
     slug: "computer-fundamentals",
     title: "Computer Fundamentals",
