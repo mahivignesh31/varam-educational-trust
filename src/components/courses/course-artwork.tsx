@@ -377,6 +377,7 @@ const scenes: Record<CourseIcon, () => ReactNode> = {
   landmark: SearchScene,
   type: DocumentScene,
   image: ChartScene,
+  store: Checklist,
 };
 
 export function CourseArtwork({ icon }: { icon: CourseIcon }) {

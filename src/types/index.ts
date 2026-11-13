@@ -29,7 +29,8 @@ export type CourseIcon =
   | "coins"
   | "landmark"
   | "type"
-  | "image";
+  | "image"
+  | "store";
 
 export interface LessonMaterial {
   id: string;

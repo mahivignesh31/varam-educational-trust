@@ -1,4 +1,5 @@
 import type { Course, Lesson, LessonVideo, Module } from "@/types";
+import { businessCourses } from "@/data/business-courses";
 import { designCourses } from "@/data/design-courses";
 import { financeCourses } from "@/data/finance-courses";
 import { technologyCourses } from "@/data/technology-courses";
@@ -106,6 +107,7 @@ export const courses: Course[] = [
   ...technologyCourses,
   ...financeCourses,
   ...designCourses,
+  ...businessCourses,
   buildCourse({
     slug: "computer-fundamentals",
     title: "Computer Fundamentals",

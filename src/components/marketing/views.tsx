@@ -81,7 +81,7 @@ export function ProgramsView() {
         <PageIntro
           eyebrow="Our programs"
           title="Courses and skill programs"
-          text="Design & Publishing covers DTP and Photoshop. Finance & Accounts covers Tally ERP 9, Tally with GST, accounting, statements, payroll, and banking. Courses & Internship Technologies covers web, Java, Python, AWS, DevOps, data, AI, machine learning, and IoT."
+          text="Business covers entrepreneurship. Design & Publishing covers DTP and Photoshop. Finance & Accounts covers Tally ERP 9, Tally with GST, accounting, statements, payroll, and banking. Courses & Internship Technologies covers web, Java, Python, AWS, DevOps, data, AI, machine learning, and IoT."
         />
         <div className="mt-8 flex flex-wrap gap-2" role="group" aria-label="Filter programs">
           {categories.map((item) => (

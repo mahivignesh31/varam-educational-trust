@@ -22,6 +22,7 @@ import {
   Monitor,
   Radio,
   Sparkles,
+  Store,
   Table2,
   Type,
   Wallet,
@@ -59,6 +60,7 @@ export const courseIconMap: Record<CourseIcon, LucideIcon> = {
   landmark: Landmark,
   type: Type,
   image: Image,
+  store: Store,
 };
 
 export function courseThumbnail(thumbnail: "classroom" | "group") {
@@ -173,6 +175,10 @@ const courseCovers: Record<CourseIcon, { src: string; alt: string }> = {
   image: {
     src: "/images/courses/photoshop.jpg",
     alt: "A person using a drawing tablet beside colour charts",
+  },
+  store: {
+    src: "/images/courses/entrepreneurship.jpg",
+    alt: "People working on laptops around a shared table",
   },
 };
 

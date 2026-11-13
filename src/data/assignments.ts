@@ -210,6 +210,14 @@ export const assignments: Assignment[] = [
     minutes: 30,
   },
   {
+    id: "asg-entrepreneurship",
+    courseSlug: "entrepreneurship",
+    title: "One offer, one trial",
+    prompt:
+      "Describe one offer you could try: who it is for, what they receive, one cost, and how you would know whether the first few customers found it useful.",
+    minutes: 30,
+  },
+  {
     id: "asg-iot",
     courseSlug: "internet-of-things",
     title: "One device reading",
